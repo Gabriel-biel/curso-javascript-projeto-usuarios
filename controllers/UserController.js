@@ -1,5 +1,5 @@
 class UserController {
-  constructor(formId ,tableId){
+  constructor(formId,tableId){
     this.fomrEl = document.getElementById(formId);
     this.tableEl = document.getElementById(tableId);
     
@@ -11,11 +11,12 @@ class UserController {
       event.preventDefault();
 
       let values = this.getValues()
-      values.photo = '';
+      
+      this.getPhoto((content) => {
+        values.photo = content;
+        this.addLine(values);
+      });
 
-      this.getPhoto();
-
-      this.addLine(this.getValues());
     });
   }
 
@@ -23,15 +24,15 @@ class UserController {
     let fileReader = new FileReader();
 
     let elements = [...this.fomrEl.elements].filter(item => {
-      if (item.name === 'photo')
-      return item
+      if (item.name === 'photo'){
+        return item;
+      }
     });
 
     let file = elements[0].files[0]
 
     fileReader.onload = () => {
-      fileReader.result;
-      
+      callback(fileReader.result); 
     };
 
     fileReader.readAsDataURL(file);
@@ -41,14 +42,14 @@ class UserController {
 
     let user = {};
 
-    [...this.fomrEl.elements].forEach(function(fields, index){
+    [...this.fomrEl.elements].forEach(function(field, index){
 
-      if(fields.name == 'gender') {
-        if(fields.checked){
-          user[fields.name] = fields.value
+      if(field.name == 'gender') {
+        if(field.checked){
+          user[field.name] = field.value
         }
       }else {
-        user[fields.name] = fields.value
+        user[field.name] = field.value
       }
     });
   
