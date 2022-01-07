@@ -1,20 +1,26 @@
 class UserController {
   constructor(formId,tableId){
-    this.fomrEl = document.getElementById(formId);
+    this.formEl = document.getElementById(formId);
     this.tableEl = document.getElementById(tableId);
     
     this.onSubmit(); 
   }
 
   onSubmit(){
-    this.fomrEl.addEventListener('submit', event => {
+    this.formEl.addEventListener('submit', event => {
       event.preventDefault();
+
+      let btn = this.formEl.querySelector("[type=submit]");
+
+      btn.disabled = true;
 
       let values = this.getValues()
       this.getPhoto().then(
         (content) => {
           values.photo = content;
           this.addLine(values);
+          this.formEl.reset();
+          btn.disabled = false;
         }, 
         (e) => {
           console.error(e);
@@ -26,7 +32,7 @@ class UserController {
     return new Promise((resolve, reject) => {
       let fileReader = new FileReader();
 
-    let elements = [...this.fomrEl.elements].filter(item => {
+    let elements = [...this.formEl.elements].filter(item => {
       if (item.name === 'photo'){
         return item;
       }
@@ -54,7 +60,7 @@ class UserController {
 
     let user = {};
 
-    [...this.fomrEl.elements].forEach(function(field, index){
+    [...this.formEl.elements].forEach(function(field, index){
 
       if(field.name == 'gender') {
         if(field.checked){
@@ -88,7 +94,7 @@ class UserController {
       <td>${dataUser.name}</td>
       <td>${dataUser.email}</td>
       <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
-      <td>${dataUser.birth}</td>
+      <td>${dataUser.register}</td>
       <td>
         <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
         <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
