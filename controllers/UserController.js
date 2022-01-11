@@ -14,8 +14,9 @@ class UserController {
 
       btn.disabled = true;
 
-      let values = this.getValues()
-      this.getPhoto().then(
+      let values = this.getValues();
+
+      this.getPhoto().then( 
         (content) => {
           values.photo = content;
           this.addLine(values);
@@ -62,7 +63,7 @@ class UserController {
 
     [...this.formEl.elements].forEach(function(field, index){
 
-      if(field.name == 'gender') {
+      if(field.name === 'gender') {
         if(field.checked){
           user[field.name] = field.value
         }

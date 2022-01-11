@@ -24,27 +24,27 @@ class User {
   }
 
   get birth() {
-    this._birth
+    return this._birth
   }
 
   get country(){
-    this._country
+    return this._country
   }
 
   get email() { 
-    this._email
+    return this._email
   }
 
   get password() {
-    this._password
+    return this._password
   }
 
   get admin(){  
-    this._admin
+    return this._admin
   }
 
   get photo() {
-    this._photo
+    return this._photo
   } 
   set photo(value) {
     this._photo = value
