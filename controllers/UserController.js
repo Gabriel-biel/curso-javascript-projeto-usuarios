@@ -130,19 +130,17 @@ class UserController {
 
       for (let name in json){
         let field = form.querySelector('[name='+name.replace('_', '')+']')
-
+        
         if (field) {
           switch (field.type){
             case 'file': 
             continue;
             break;
-
+            
             case 'radio':
-              console.log(field)
-              field = form.querySelector('[name='+name.replace('_', '')+'][value='+json[name]+']');
-              console.log({field})
+              field = form.querySelector('[name='+name.replace('_', '')+'][value='+ json[name] +']');
               field.checked = true;
-            break;
+              break;
             
             case 'checkbox':
               field.checked = json[name]
