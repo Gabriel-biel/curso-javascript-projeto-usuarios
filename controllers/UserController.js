@@ -138,9 +138,9 @@ class UserController {
             break;
 
             case 'radio':
-              field = form.querySelector(
-              '[name='+name.replace('_', '')+'][value='+json[name]+']');
               console.log(field)
+              field = form.querySelector('[name='+name.replace('_', '')+'][value='+json[name]+']');
+              console.log({field})
               field.checked = true;
             break;
             
