@@ -155,9 +155,15 @@ class UserController {
         user.admin);
   }
 
+  insert(data){
+    sessionStorage.setItem()
+  }
+
   addLine(dataUser) {
 
     let tr = document.createElement('tr');
+
+    this.insert(dataUser);
 
     tr.dataset.user = JSON.stringify(dataUser);
 
