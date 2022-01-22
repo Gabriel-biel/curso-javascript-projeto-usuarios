@@ -5,7 +5,8 @@ class UserController {
     this.tableEl = document.getElementById(tableId);
     
     this.onSubmit();
-    this.onEdit(); 
+    this.onEdit();
+    this.selectAll(); 
   }
 
   onEdit(){
@@ -80,6 +81,7 @@ class UserController {
       this.getPhoto(this.formEl).then( 
         (content) => {
           values.photo = content;
+          this.insert(values);
           this.addLine(values);
           this.formEl.reset();
           btn.disabled = false;
@@ -155,15 +157,40 @@ class UserController {
         user.admin);
   }
 
+  getUsersStorage(){
+    let users = [];
+
+    if(sessionStorage.getItem('users')){
+      users = JSON.parse(sessionStorage.getItem('users'));
+    }
+
+    return users;
+  }
+
+
+  selectAll(){
+    let users = this.getUsersStorage();
+    
+    users.forEach(dataUser=>{
+
+      let user = new User();
+
+      user.loadFromJSON(dataUser);
+
+      this.addLine(user)
+    })
+  };
+
   insert(data){
-    sessionStorage.setItem()
+    let users = this.getUsersStorage();
+
+    users.push(data);
+    sessionStorage.setItem("users", JSON.stringify(users))
   }
 
   addLine(dataUser) {
 
     let tr = document.createElement('tr');
-
-    this.insert(dataUser);
 
     tr.dataset.user = JSON.stringify(dataUser);
 
@@ -181,9 +208,7 @@ class UserController {
     `
 
     this.addEventsTr(tr);
-    
     this.tableEl.appendChild(tr);
-    
     this.updateCount();
   }
 
@@ -194,7 +219,6 @@ class UserController {
         tr.remove();
         this.updateCount();
       }
-
     });
 
     tr.querySelector('.btn-edit').addEventListener('click', e=> {
@@ -224,7 +248,6 @@ class UserController {
               field.value = json[name];
           }
         }
-
       }
       this.formUpdateEl.querySelector('.photo').scr = json._photo;
       this.showPanelUpdate();
@@ -258,7 +281,5 @@ class UserController {
 
     document.querySelector('#number-users').innerHTML = numberUsers;
     document.querySelector('#number-users-admin').innerHTML = numberAdmin;
-
-
   }
 }
