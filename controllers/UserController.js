@@ -37,22 +37,13 @@ class UserController {
             result._photo = content;
           }
 
-          tr.dataset.user = JSON.stringify(result);
+          let user = new User();
 
-          tr.innerHTML =
-          `
-            <td><img src="${result._photo}" alt="User Image" class="img-circle img-sm"></td>
-            <td>${result._name}</td>
-            <td>${result._email}</td>
-            <td>${(result._admin) ? 'Sim' : 'Não'}</td>
-            <td>${Utils.dateFormat(result._register)}</td>
-            <td>
-              <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-              <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-            </td>
-          `
-        this.addEventsTr(tr);
-        this.updateCount();
+          user.loadFromJSON(result);
+
+          this.getTr(user, tr);
+
+          this.updateCount();
           
           this.formUpdateEl.reset();
           btn.disabled = false;
@@ -160,8 +151,8 @@ class UserController {
   getUsersStorage(){
     let users = [];
 
-    if(sessionStorage.getItem('users')){
-      users = JSON.parse(sessionStorage.getItem('users'));
+    if(localStorage.getItem('users')){
+      users = JSON.parse(localStorage.getItem('users'));
     }
 
     return users;
@@ -185,12 +176,20 @@ class UserController {
     let users = this.getUsersStorage();
 
     users.push(data);
-    sessionStorage.setItem("users", JSON.stringify(users))
+    localStorage.setItem("users", JSON.stringify(users))
   }
 
   addLine(dataUser) {
 
-    let tr = document.createElement('tr');
+    let tr = this.getTr(dataUser);
+
+    this.tableEl.appendChild(tr);
+    this.updateCount();
+  }
+
+  getTr(dataUser, tr = null){
+
+    if( tr == null ) tr = document.createElement('tr');
 
     tr.dataset.user = JSON.stringify(dataUser);
 
@@ -208,8 +207,8 @@ class UserController {
     `
 
     this.addEventsTr(tr);
-    this.tableEl.appendChild(tr);
-    this.updateCount();
+
+    return tr;
   }
 
   addEventsTr(tr){
